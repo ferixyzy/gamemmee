@@ -1,0 +1,14 @@
+{
+  "name": "Garden Coil",
+  "short_name": "Garden Coil",
+  "description": "An original casual snake puzzle adventure.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#75d8bd",
+  "theme_color": "#75d8bd",
+  "icons": [
+    {"src":"assets/icons/icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
