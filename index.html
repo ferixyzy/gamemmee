@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#75d8bd">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Garden Coil">
+  <meta name="description" content="Garden Coil - an original casual snake puzzle game.">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="style.css">
+  <title>Garden Coil</title>
+</head>
+<body>
+  <div id="app" class="app">
+    <div id="loading" class="screen loading-screen">
+      <div class="loading-art">
+        <div class="sun"></div><div class="hill h1"></div><div class="hill h2"></div>
+        <div class="pond"></div><div class="leaf l1"></div><div class="leaf l2"></div>
+        <div class="loading-snake"><span class="eye e1"></span><span class="eye e2"></span><span class="tongue"></span></div>
+      </div>
+      <div class="loading-title">GARDEN COIL</div>
+      <div class="loading-sub">Preparing your puzzle garden...</div>
+      <div class="progress"><span id="loadBar"></span></div>
+      <div id="loadText">0%</div>
+    </div>
+
+    <div id="menu" class="screen hidden">
+      <header class="topbar">
+        <div class="hud-pill energy"><span class="hud-icon bolt">✦</span><b id="energyText">5/5</b><button class="mini-plus" data-action="energy">+</button></div>
+        <div class="brand"><div class="brand-mark">GC</div><span>Garden Coil</span></div>
+        <div class="hud-pill coins"><span class="hud-icon coin">●</span><b id="coinText">0</b><button class="mini-plus" data-action="shop">+</button></div>
+        <button class="icon-btn" data-screen="settings" aria-label="Settings">⚙</button>
+      </header>
+
+      <main class="menu-main">
+        <section class="hero-card">
+          <div class="hero-copy">
+            <span class="eyebrow">CASUAL PUZZLE ADVENTURE</span>
+            <h1>Wind your way<br>through the garden.</h1>
+            <p>Collect every berry, avoid the thorns, and reach the glowing gate.</p>
+            <button class="primary-btn big" data-action="continue">PLAY NOW <span>›</span></button>
+          </div>
+          <div class="hero-snake" aria-hidden="true">
+            <div class="snake-body b1"></div><div class="snake-body b2"></div><div class="snake-body b3"></div>
+            <div class="snake-head"><i></i><i></i><em></em></div>
+          </div>
+          <div class="spark s1">✦</div><div class="spark s2">✧</div>
+        </section>
+
+        <section class="mode-grid">
+          <button class="mode-card classic" data-action="continue"><div class="mode-art">◒</div><div><strong>Garden Trail</strong><small>30+ puzzle levels</small></div><span>›</span></button>
+          <button class="mode-card challenge" data-action="daily"><div class="mode-art">◇</div><div><strong>Daily Grove</strong><small>Fresh reward each day</small></div><span>›</span></button>
+          <button class="mode-card shapes" data-screen="achievements"><div class="mode-art">✿</div><div><strong>Milestones</strong><small>Collect badges & prizes</small></div><span>›</span></button>
+        </section>
+
+        <section class="quick-grid">
+          <button class="quick-card" data-screen="levels"><span>▦</span><b>Levels</b><small id="levelProgress">1 / 30</small></button>
+          <button class="quick-card" data-screen="shop"><span>◇</span><b>Shop</b><small>Cosmetics</small></button>
+          <button class="quick-card" data-screen="inventory"><span>▣</span><b>Bag</b><small>Collection</small></button>
+          <button class="quick-card" data-screen="achievements"><span>★</span><b>Badges</b><small>Achievements</small></button>
+        </section>
+      </main>
+      <nav class="bottom-nav">
+        <button class="nav-btn active" data-screen="menu"><span>⌂</span><b>Home</b></button>
+        <button class="nav-btn" data-screen="levels"><span>▦</span><b>Levels</b></button>
+        <button class="nav-btn" data-screen="shop"><span>◇</span><b>Shop</b></button>
+        <button class="nav-btn" data-screen="inventory"><span>▣</span><b>Bag</b></button>
+      </nav>
+    </div>
+
+    <div id="levels" class="screen hidden">
+      <header class="subbar"><button class="back-btn" data-screen="menu">‹</button><div><small>GARDEN TRAIL</small><h2>Choose a level</h2></div><div class="subbar-spacer"></div></header>
+      <main class="levels-main">
+        <div class="level-summary"><span id="levelStarsTotal">0 ★</span><span id="levelCoinsTotal">0 coins</span></div>
+        <div id="levelGrid" class="level-grid"></div>
+      </main>
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-screen="menu"><span>⌂</span><b>Home</b></button>
+        <button class="nav-btn active" data-screen="levels"><span>▦</span><b>Levels</b></button>
+        <button class="nav-btn" data-screen="shop"><span>◇</span><b>Shop</b></button>
+        <button class="nav-btn" data-screen="inventory"><span>▣</span><b>Bag</b></button>
+      </nav>
+    </div>
+
+    <div id="game" class="screen hidden">
+      <header class="game-top">
+        <button class="icon-btn dark" data-action="gameHome">⌂</button>
+        <div class="level-title">LEVEL <b id="gameLevel">1</b></div>
+        <div class="game-stats"><span>BEST <b id="bestMoves">—</b></span><span>MOVES <b id="moves">0</b></span></div>
+        <button class="icon-btn dark" data-action="pause">Ⅱ</button>
+      </header>
+      <main class="game-main">
+        <div class="game-hud">
+          <div class="hint-pill">HINTS <b id="hintText">30</b></div>
+          <button class="hint-btn" data-action="hint">?</button>
+        </div>
+        <div id="board" class="board" aria-label="Puzzle board"></div>
+        <div class="game-actions">
+          <button class="round-action undo" data-action="undo">↶<small>UNDO</small></button>
+          <button class="round-action retry" data-action="retry">↻<small>RETRY</small></button>
+        </div>
+        <div class="dpad" aria-label="Direction controls">
+          <button data-dir="up">⌃</button>
+          <button data-dir="left">‹</button>
+          <button data-dir="down">⌄</button>
+          <button data-dir="right">›</button>
+        </div>
+      </main>
+    </div>
+
+    <div id="shop" class="screen hidden">
+      <header class="subbar"><button class="back-btn" data-screen="menu">‹</button><div><small>COLLECTION</small><h2>Garden Shop</h2></div><div class="coin-balance">● <b id="shopCoins">0</b></div></header>
+      <main class="scroll-main"><div id="shopGrid" class="shop-grid"></div></main>
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-screen="menu"><span>⌂</span><b>Home</b></button><button class="nav-btn" data-screen="levels"><span>▦</span><b>Levels</b></button><button class="nav-btn active" data-screen="shop"><span>◇</span><b>Shop</b></button><button class="nav-btn" data-screen="inventory"><span>▣</span><b>Bag</b></button>
+      </nav>
+    </div>
+
+    <div id="inventory" class="screen hidden">
+      <header class="subbar"><button class="back-btn" data-screen="menu">‹</button><div><small>YOUR COLLECTION</small><h2>Backpack</h2></div><div class="subbar-spacer"></div></header>
+      <main class="scroll-main"><div class="inventory-tabs"><button class="active">SNAKES</button><button>GROVES</button><button>TRAILS</button></div><div id="inventoryGrid" class="inventory-grid"></div></main>
+      <nav class="bottom-nav">
+        <button class="nav-btn" data-screen="menu"><span>⌂</span><b>Home</b></button><button class="nav-btn" data-screen="levels"><span>▦</span><b>Levels</b></button><button class="nav-btn" data-screen="shop"><span>◇</span><b>Shop</b></button><button class="nav-btn active" data-screen="inventory"><span>▣</span><b>Bag</b></button>
+      </nav>
+    </div>
+
+    <div id="achievements" class="screen hidden">
+      <header class="subbar"><button class="back-btn" data-screen="menu">‹</button><div><small>PROGRESS</small><h2>Milestones</h2></div><div class="subbar-spacer"></div></header>
+      <main class="scroll-main"><div id="achievementList" class="achievement-list"></div></main>
+    </div>
+
+    <div id="settings" class="screen hidden">
+      <header class="subbar"><button class="back-btn" data-screen="menu">‹</button><div><small>OPTIONS</small><h2>Settings</h2></div><div class="subbar-spacer"></div></header>
+      <main class="scroll-main settings-main">
+        <section class="settings-card">
+          <label>Sound effects <input type="checkbox" id="soundToggle"><span class="toggle"></span></label>
+          <label>Music <input type="checkbox" id="musicToggle"><span class="toggle"></span></label>
+          <label>Vibration <input type="checkbox" id="vibrationToggle"><span class="toggle"></span></label>
+          <label>Graphics quality <select id="qualitySelect"><option value="high">High</option><option value="balanced">Balanced</option><option value="low">Low</option></select></label>
+        </section>
+        <section class="settings-card">
+          <button class="setting-row" data-action="daily"><span>Daily reward</span><b>Open ›</b></button>
+          <button class="setting-row" data-action="about"><span>About Garden Coil</span><b>›</b></button>
+          <button class="setting-row danger" data-action="reset"><span>Reset all progress</span><b>Reset</b></button>
+        </section>
+        <p class="version">Garden Coil v1.0 · Offline ready</p>
+      </main>
+    </div>
+
+    <div id="dailyModal" class="modal hidden"><div class="modal-backdrop"></div><section class="modal-card daily-card"><button class="modal-close" data-action="closeModal">×</button><span class="modal-kicker">7-DAY GROVE</span><h2>Daily Gifts</h2><p>Come back every day for a little garden boost.</p><div id="dailyGrid" class="daily-grid"></div><button id="claimDaily" class="primary-btn big" data-action="claimDaily">CLAIM TODAY</button></section></div>
+
+    <div id="pauseModal" class="modal hidden"><div class="modal-backdrop"></div><section class="modal-card"><span class="modal-kicker">PAUSED</span><h2>Take a breath.</h2><p>Your puzzle is safely saved.</p><button class="primary-btn big" data-action="resume">RESUME</button><button class="secondary-btn" data-action="gameHome">EXIT LEVEL</button></section></div>
+
+    <div id="victoryModal" class="modal hidden"><div class="modal-backdrop dim"></div><section class="victory-card"><div class="victory-ribbon">LEVEL CLEAR</div><h2>Garden Complete!</h2><div id="victoryStars" class="victory-stars">★★★</div><div class="victory-stats"><div><small>MOVES</small><b id="victoryMoves">0</b></div><div><small>BEST</small><b id="victoryBest">0</b></div><div><small>REWARD</small><b id="victoryReward">+10</b></div></div><div class="reward-line">You found <b id="victoryCoins">10</b> garden coins.</div><div class="victory-buttons"><button class="primary-btn big" data-action="next">NEXT LEVEL ›</button><button class="share-btn" data-action="share">↗ SHARE</button></div></section></div>
+
+    <div id="toast" class="toast"></div>
+    <div id="confirmModal" class="modal hidden"><div class="modal-backdrop"></div><section class="modal-card"><span class="modal-kicker">ARE YOU SURE?</span><h2>Reset progress?</h2><p>This clears levels, coins, inventory, rewards and settings.</p><div class="confirm-row"><button class="secondary-btn" data-action="closeModal">CANCEL</button><button class="danger-btn" data-action="confirmReset">RESET</button></div></section></div>
+  </div>
+  <script src="levels.js"></script>
+  <script src="save.js"></script>
+  <script src="audio.js"></script>
+  <script src="ui.js"></script>
+  <script src="game.js"></script>
+</body>
+</html>
+
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => navigator.serviceWorker.register("service-worker.js").catch(()=>{}));
+}
+</script>
